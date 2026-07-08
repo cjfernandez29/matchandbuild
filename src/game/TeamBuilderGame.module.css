@@ -133,6 +133,8 @@
   width: 0;
   height: 0;
   transform-style: preserve-3d;
+  /* will-change puntual: es la única capa que viaja por el tablero */
+  will-change: transform;
 }
 
 /* El personaje se planta con los pies en el punto de anclaje.
@@ -250,6 +252,107 @@
   z-index: 8;
 }
 
+/* Texto tipo consola durante la construcción de la torre */
+.console {
+  position: absolute;
+  top: var(--space-12);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+  font-family: 'Consolas', 'SF Mono', 'Fira Mono', monospace;
+  font-size: var(--text-xs);
+  color: var(--color-tecnologia);
+  background: rgba(13, 18, 48, 0.75);
+  border: 1px solid rgba(0, 194, 255, 0.35);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  white-space: nowrap;
+}
+
+.dot {
+  animation: dotBlink 1.2s ease-in-out infinite;
+}
+
+.dot2 {
+  animation-delay: 0.2s;
+}
+
+.dot3 {
+  animation-delay: 0.4s;
+}
+
+/* Salto en ola durante la celebración (delay por personaje inline) */
+.avatarCelebra {
+  display: block;
+  animation: salto 0.65s ease-in-out infinite;
+}
+
+/* Tarjeta final sobre la escena */
+.winCardWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(13, 18, 48, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+.winCard {
+  background: #141a3d;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 44px rgba(45, 107, 255, 0.35);
+}
+
+.winTexto {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-white);
+  margin-bottom: var(--space-6);
+  text-wrap: balance;
+}
+
+.winBotones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.btnRegistro {
+  display: inline-block;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  background: var(--gradient-brand);
+  color: var(--color-white);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btnRegistro:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(123, 47, 247, 0.5);
+}
+
+.btnReset {
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--color-white);
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+.btnReset:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
 @keyframes bounce {
   0%,
   100% {
@@ -309,18 +412,42 @@
   }
 }
 
+@keyframes salto {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes dotBlink {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .avatarBounce,
   .avatarNudge,
   .avatarBreath,
+  .avatarCelebra,
   .bubblePulse,
   .bubbleNudge,
-  .check {
+  .check,
+  .dot {
     animation: none;
   }
 
   .bubbleTooltip,
-  .platform::after {
+  .platform::after,
+  .btnRegistro,
+  .btnReset {
     transition: none;
   }
 }
@@ -330,7 +457,8 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--spot-color, var(--color-white));
+  /* Aclarado sobre navy para contraste AA (el morado puro no llega) */
+  color: color-mix(in srgb, var(--spot-color, var(--color-white)) 55%, white);
   background: rgba(13, 18, 48, 0.75);
   border: 1px solid var(--spot-color, rgba(255, 255, 255, 0.3));
   border-radius: var(--radius-full);
