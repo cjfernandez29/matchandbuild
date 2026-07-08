@@ -1,0 +1,28 @@
+/* Canvas propio del confeti, sobre todo el panel */
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 11;
+}
+
+.stampWrap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.stamp {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 12vw, 6.5rem);
+  letter-spacing: 0.04em;
+  color: var(--color-white);
+  text-shadow:
+    0 0 26px rgba(0, 194, 255, 0.8),
+    0 0 64px rgba(255, 46, 126, 0.5);
+}

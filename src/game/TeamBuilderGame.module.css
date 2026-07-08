@@ -1,0 +1,383 @@
+/* ============================================================
+   Panel oscuro del juego (estilo vite.dev): viñeta radial,
+   tablero isométrico con grid tenue y plataformas con glow.
+   ============================================================ */
+
+.panel {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(45, 107, 255, 0.12), transparent 65%),
+    #0d1230;
+  overflow: hidden;
+  padding: var(--space-4);
+}
+
+.hud {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 10;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+}
+
+.hudContador {
+  color: var(--color-tecnologia);
+  font-variant-numeric: tabular-nums;
+}
+
+.scene {
+  display: grid;
+  place-items: center;
+  padding-block: var(--space-8) var(--space-4);
+}
+
+/* ---- Tablero ----
+   Mobile-first: vista 2D cenital. En ≥768px el tablero rota a
+   isométrico (rotateX + rotateZ) y los personajes se "levantan"
+   con la contra-rotación de .standUp. */
+.board {
+  position: relative;
+  width: min(320px, 88vw);
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 39px, rgba(255, 255, 255, 0.045) 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 39px, rgba(255, 255, 255, 0.045) 39px 40px),
+    rgba(255, 255, 255, 0.015);
+  transform-style: preserve-3d;
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Punto de anclaje de cada plataforma/personaje en el tablero */
+.spot {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+/* Plataforma plana (en el plano del tablero) con glow estático */
+.platform {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--plat-size, 84px);
+  height: var(--plat-size, 84px);
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  border: 1.5px solid var(--spot-color);
+  background: color-mix(in srgb, var(--spot-color) 10%, transparent);
+  box-shadow:
+    0 0 22px 2px color-mix(in srgb, var(--spot-color) 45%, transparent),
+    inset 0 0 14px color-mix(in srgb, var(--spot-color) 25%, transparent);
+}
+
+/* Capa de glow intensificado pre-renderizada: en hover solo cambia
+   opacity (nada de animar box-shadow → 60 fps, riesgo 3 del spec). */
+.platform::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: 0 0 36px 8px color-mix(in srgb, var(--spot-color) 65%, transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.spot:hover .platform::after,
+.spot:focus-within .platform::after {
+  opacity: 1;
+}
+
+.platformCeo {
+  --plat-size: 112px;
+}
+
+/* Check tenue en la plataforma vacía tras el reclutamiento */
+.check {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--spot-color);
+  font-size: 26px;
+  font-weight: 700;
+  opacity: 0.55;
+  animation: aparecer 0.5s ease;
+}
+
+/* Capa del viaje: Framer Motion anima translate x/y aquí, en
+   coordenadas locales del tablero (pre-transform 3D). */
+.mover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+/* El personaje se planta con los pies en el punto de anclaje.
+   En 2D solo se centra; en isométrico se contra-rota (billboard). */
+.standUp {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -92%);
+  transform-origin: 0 0;
+}
+
+.figure {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  /* Touch target ≥44px */
+  min-width: 44px;
+  min-height: 44px;
+  --char-w: 52px;
+}
+
+.candidato {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--color-white);
+  color: var(--color-navy);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  z-index: 5;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--color-white);
+}
+
+/* Globo "¡Elígeme!" en idle: pulso suave; en nudge, pulso intenso */
+.bubblePulse {
+  animation: bubblePulse 1.6s ease-in-out infinite;
+}
+
+.bubbleNudge {
+  animation: bubbleNudge 0.7s ease-in-out infinite;
+}
+
+/* Globo del reclutado minimizado: reaparece en hover/focus */
+.bubbleTooltip {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.figure:hover .bubbleTooltip,
+.figure:focus-visible .bubbleTooltip {
+  opacity: 1;
+}
+
+/* Idle: candidatos rebotan, el CEO respira. En nudge el salto es
+   más fuerte. Aplicado al avatar (el botón lo anima Framer). */
+.avatarBounce {
+  display: block;
+  animation: bounce var(--t-bounce, 1.8s) ease-in-out infinite;
+}
+
+.avatarNudge {
+  display: block;
+  animation: bounceFuerte 0.7s ease-in-out infinite;
+}
+
+.avatarBreath {
+  display: block;
+  animation: breath var(--t-breath, 2.4s) ease-in-out infinite;
+}
+
+/* Destello radial de la transformación C-level */
+.flash {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 96px;
+  height: 96px;
+  margin: -48px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--spot-color), transparent 70%);
+  pointer-events: none;
+}
+
+/* Estela de partículas: un solo canvas sobre todo el panel */
+.trailCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 8;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes bounceFuerte {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes breath {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes bubblePulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.07);
+  }
+}
+
+@keyframes bubbleNudge {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatarBounce,
+  .avatarNudge,
+  .avatarBreath,
+  .bubblePulse,
+  .bubbleNudge,
+  .check {
+    animation: none;
+  }
+
+  .bubbleTooltip,
+  .platform::after {
+    transition: none;
+  }
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--spot-color, var(--color-white));
+  background: rgba(13, 18, 48, 0.75);
+  border: 1px solid var(--spot-color, rgba(255, 255, 255, 0.3));
+  border-radius: var(--radius-full);
+  padding: 2px var(--space-2);
+  white-space: nowrap;
+}
+
+/* ---- Vista isométrica (≥768px) ---- */
+@media (min-width: 768px) {
+  .panel {
+    padding: var(--space-6);
+  }
+
+  .scene {
+    padding-block: var(--space-6) 0;
+  }
+
+  .board {
+    width: min(520px, 60vw);
+    /* Isométrico estilo vite.dev (proyección paralela, sin perspective) */
+    transform: rotateX(54deg) rotateZ(45deg);
+    margin-block: -40px -20px;
+  }
+
+  /* Billboard: deshace la rotación del tablero para que el personaje
+     quede de pie, girando sobre su punto de apoyo. */
+  .standUp {
+    transform: rotateZ(-45deg) rotateX(-54deg) translate(-50%, -92%);
+  }
+
+  .platform {
+    --plat-size: 108px;
+  }
+
+  .platformCeo {
+    --plat-size: 148px;
+  }
+
+  .figure {
+    --char-w: 64px;
+  }
+
+  .bubble {
+    font-size: var(--text-xs);
+  }
+
+  .label {
+    font-size: 10px;
+  }
+}

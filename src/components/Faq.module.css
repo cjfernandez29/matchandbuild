@@ -1,0 +1,78 @@
+.section {
+  padding-block: var(--space-16);
+  background: var(--color-bg-alt);
+}
+
+.lista {
+  max-width: 720px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.item {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.pregunta {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  margin: 0;
+}
+
+.boton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  text-align: left;
+  font-weight: 700;
+  color: var(--color-navy);
+  padding: var(--space-4) var(--space-6);
+  min-height: 44px;
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.chevronAbierto {
+  transform: rotate(180deg);
+}
+
+/* Truco de grid-rows para animar la apertura sin medir alturas */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.panelAbierto {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  overflow: hidden;
+}
+
+.respuesta {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  padding: 0 var(--space-6) var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chevron {
+    transition: none;
+  }
+}

@@ -1,0 +1,75 @@
+.section {
+  padding-block: var(--space-16);
+  background: var(--color-bg-alt);
+}
+
+.podio {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  border-top: 4px solid transparent;
+}
+
+.puesto1 {
+  border-top-color: var(--color-finanzas);
+}
+
+.puesto2 {
+  border-top-color: var(--color-tecnologia);
+}
+
+.puesto3 {
+  border-top-color: var(--color-marketing);
+}
+
+.puesto {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.titulo {
+  font-size: var(--text-xl);
+  color: var(--color-navy);
+  margin-bottom: var(--space-2);
+}
+
+.descripcion {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .podio {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: end;
+  }
+
+  /* Efecto podio: el 1.er puesto al centro y más alto */
+  .puesto1 {
+    order: 2;
+    padding-block: var(--space-8);
+  }
+
+  .puesto2 {
+    order: 1;
+  }
+
+  .puesto3 {
+    order: 3;
+  }
+}

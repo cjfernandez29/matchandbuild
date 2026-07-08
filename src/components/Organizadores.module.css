@@ -1,0 +1,32 @@
+.section {
+  padding-block: var(--space-12);
+  background: var(--color-bg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+  align-items: center;
+  justify-items: center;
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.item {
+  display: grid;
+  place-items: center;
+}
+
+/* Dimensiones reservadas para evitar saltos de layout */
+.logo {
+  width: 160px;
+  height: 80px;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

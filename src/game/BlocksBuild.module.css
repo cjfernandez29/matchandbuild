@@ -1,0 +1,12 @@
+.svg {
+  width: 92px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.45));
+}
+
+@media (min-width: 768px) {
+  .svg {
+    width: 116px;
+  }
+}
