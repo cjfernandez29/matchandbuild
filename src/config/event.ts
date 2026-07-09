@@ -24,7 +24,7 @@ export interface EventConfig {
     hitos: { hora: string; titulo: string; descripcion?: string }[];
   }[];
   premios: { puesto: string; titulo: string; descripcion: string }[];
-  faqs: { pregunta: string; respuesta: string }[];
+  faqs: { pregunta: string; respuesta: string | string[] }[];
   organizadores: { nombre: string; logo: string }[];
   redes: { nombre: 'instagram' | 'facebook' | 'tiktok'; url: string; habilitado: boolean }[];
   hashtags: string[];
@@ -71,52 +71,59 @@ export const EVENT: EventConfig = {
 
   queViviras: [
     {
-      titulo: 'Dinámicas colaborativas',
+      titulo: '🤝 Match entre talento',
       descripcion:
-        'Actividades diseñadas para romper el hielo, conocer talento y descubrir con quién hacer match.',
+        'Conecta con emprendedores, estudiantes y profesionales para formar equipos con habilidades complementarias.',
       color: 'tecnologia',
     },
     {
-      titulo: 'Ponencias inspiradoras',
+      titulo: '🎯 Retos de innovación',
       descripcion:
-        'Historias y aprendizajes de quienes ya están construyendo proyectos con impacto real.',
+        'Desarrolla soluciones a desafíos reales junto a tu equipo mediante trabajo colaborativo.',
       color: 'marketing',
     },
     {
-      titulo: 'Networking estratégico',
+      titulo: '💬 Mentoría y aprendizaje',
       descripcion:
-        'Conecta con emprendedores, estudiantes y profesionales que comparten tus ganas de innovar.',
+        'Recibe acompañamiento de mentores y participa en espacios de aprendizaje e inspiración.',
       color: 'operaciones',
     },
     {
-      titulo: 'Innovación abierta',
+      titulo: '🚀 Presentación y premiación',
       descripcion:
-        'Espacios para crear soluciones a desafíos reales y convertir ideas en oportunidades.',
+        'Presenta tu proyecto ante el jurado y compite por los premios para los mejores equipos.',
       color: 'finanzas',
     },
   ],
 
   agenda: [
     {
-      dia: 'Jueves 04 de septiembre',
+      dia: 'Viernes 04 de septiembre',
       horario: '3:00 p. m. – 6:00 p. m.',
       hitos: [
-        { hora: '3:00 p. m.', titulo: 'Registro y bienvenida', descripcion: 'Acreditación de participantes y apertura del evento.' },
-        { hora: '3:30 p. m.', titulo: 'Ponencia inaugural', descripcion: 'Por definir.' },
-        { hora: '4:30 p. m.', titulo: 'Dinámicas colaborativas', descripcion: 'Actividades para conocer talento y formar conexiones.' },
-        { hora: '5:30 p. m.', titulo: 'Networking y cierre del día', descripcion: 'Espacio libre para conectar con otros participantes.' },
+        { hora: '3:00 p. m.', titulo: 'Bienvenida e inicio del evento', descripcion: 'Presentación del Match & Build Challenge y organizaciones participantes.' },
+        { hora: '3:20 p. m.', titulo: 'Presentación de los retos', descripcion: 'Conoce los desafíos que serán trabajados durante el Challenge.' },
+        { hora: '3:45 p. m.', titulo: 'Presentación de mentores', descripcion: 'Conoce a los mentores que acompañarán a los equipos.' },
+        { hora: '4:15 p. m.', titulo: 'Explicación de la dinámica del Challenge', descripcion: 'Presentación de la metodología y actividades del día siguiente.' },
+        { hora: '4:45 p. m.', titulo: 'Conversatorio', descripcion: 'Espacio de aprendizaje, diálogo e intercambio de experiencias.' },
+        { hora: '5:20 p. m.', titulo: 'Ideas y sugerencias del público', descripcion: 'Aportes y recomendaciones de los participantes.' },
+        { hora: '5:40 p. m.', titulo: 'Presentación de premios y cierre', descripcion: 'Anuncio de premios y cierre de la primera jornada.' },
       ],
     },
     {
-      dia: 'Viernes 05 de septiembre',
+      dia: 'Sábado 05 de septiembre',
       horario: '8:00 a. m. – 7:00 p. m.',
       hitos: [
-        { hora: '8:00 a. m.', titulo: 'Acreditación', descripcion: 'Ingreso y bienvenida al segundo día.' },
-        { hora: '9:00 a. m.', titulo: 'Ponencias inspiradoras', descripcion: 'Por definir.' },
-        { hora: '11:00 a. m.', titulo: 'Formación de equipos', descripcion: 'Haz match y arma tu equipo multidisciplinario.' },
-        { hora: '2:00 p. m.', titulo: 'Innovación abierta', descripcion: 'Desarrollo de soluciones a desafíos reales.' },
-        { hora: '5:00 p. m.', titulo: 'Presentación de proyectos', descripcion: 'Cada equipo presenta su propuesta.' },
-        { hora: '6:30 p. m.', titulo: 'Premiación y cierre', descripcion: 'Reconocimiento a los mejores equipos.' },
+        { hora: '8:00 a. m.', titulo: 'Bienvenida de participantes', descripcion: 'Inicio del evento y recepción de participantes.' },
+        { hora: '8:30 a. m.', titulo: 'Palabras de los organizadores', descripcion: 'Mensaje de bienvenida para iniciar el Challenge.' },
+        { hora: '9:00 a. m.', titulo: 'Networking', descripcion: 'Conecta con otros participantes y genera nuevas alianzas.' },
+        { hora: '9:45 a. m.', titulo: 'Dinámica: Escoge al CEO', descripcion: 'Define al líder que representará al equipo.' },
+        { hora: '10:15 a. m.', titulo: 'Formación de equipos', descripcion: 'Los CEOs convocan participantes para formar equipos.' },
+        { hora: '12:30 p. m.', titulo: 'Almuerzo', descripcion: '' },
+        { hora: '2:00 p. m.', titulo: 'Desarrollo de proyectos', descripcion: 'Construcción de soluciones con apoyo de mentores.' },
+        { hora: '4:30 p. m.', titulo: 'Coffee break', descripcion: '' },
+        { hora: '5:00 p. m.', titulo: 'Presentación de proyectos', descripcion: 'Cada equipo presenta su propuesta al jurado.' },
+        { hora: '6:30 p. m.', titulo: 'Premiación y clausura', descripcion: 'Reconocimiento a los mejores equipos y cierre del evento.' },
       ],
     },
   ],
@@ -150,8 +157,13 @@ export const EVENT: EventConfig = {
     },
     {
       pregunta: '¿Qué debo llevar?',
-      respuesta:
-        'Tu documento de identidad para la acreditación y, si tienes, una laptop para trabajar con tu equipo el segundo día. Lo más importante: actitud colaborativa y ganas de construir.',
+      respuesta: [
+        'Documento Nacional de Identidad (DNI) u otro documento de identificación.',
+        'Laptop (recomendable) y su cargador para trabajar con tu equipo.',
+        'Celular con batería suficiente y acceso a WhatsApp para la coordinación del equipo.',
+        'Material para tomar apuntes (opcional).',
+        'Muchas ganas de colaborar, aprender, conectar con otros emprendedores y construir soluciones con impacto.',
+      ],
     },
   ],
 

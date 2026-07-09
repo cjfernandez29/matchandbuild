@@ -53,7 +53,17 @@ function Faq() {
                   className={`${styles.panel} ${estaAbierta ? styles.panelAbierto : ''}`}
                 >
                   <div className={styles.panelInner}>
-                    <p className={styles.respuesta}>{faq.respuesta}</p>
+                    <p className={styles.respuesta}>
+                      {Array.isArray(faq.respuesta) ? (
+                        <ul className={styles.respuestaLista}>
+                          {faq.respuesta.map((item, idx) => (
+                            <li key={idx}>{item}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className={styles.respuesta}>{faq.respuesta}</p>
+                      )}
+                    </p>
                   </div>
                 </div>
               </li>

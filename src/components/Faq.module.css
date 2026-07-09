@@ -75,3 +75,16 @@
     transition: none;
   }
 }
+
+.respuestaLista {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.respuestaLista li {
+  line-height: 1.5;
+}
