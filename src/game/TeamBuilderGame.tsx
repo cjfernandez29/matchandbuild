@@ -280,6 +280,17 @@ function TeamBuilderGame() {
       }
     >
       <div className={styles.hudContainer}>
+        {!enFinal && (
+          <motion.div
+            className={styles.ceoBubbleDisplay}
+            key={textoCeo}
+            initial={reducedMotion ? false : { scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <div className={styles.ceoBubbleText}>CEO: {textoCeo}</div>
+          </motion.div>
+        )}
+
         <p className={styles.hud} aria-live="polite">
           {juego.hudLabel}{' '}
           <motion.span
@@ -291,17 +302,6 @@ function TeamBuilderGame() {
             {contador}/5
           </motion.span>
         </p>
-
-        {!enFinal && (
-          <motion.div
-            className={styles.ceoBubbleDisplay}
-            key={textoCeo}
-            initial={reducedMotion ? false : { scale: 0.6, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-          >
-            <div className={styles.ceoBubbleText}>CEO: {textoCeo}</div>
-          </motion.div>
-        )}
       </div>
 
       {construyendo && (
