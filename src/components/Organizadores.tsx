@@ -2,7 +2,6 @@ import { EVENT } from '../config/event'
 import SectionTitle from './SectionTitle'
 import styles from './Organizadores.module.css'
 
-/** Logos de las instituciones organizadoras (public/logos/). */
 function Organizadores() {
   return (
     <section className={styles.section}>

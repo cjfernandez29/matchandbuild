@@ -6,8 +6,6 @@
   overflow: hidden;
 }
 
-/* Fondo como <img> lazy (en vez de background-image) para que
-   solo se descargue al acercarse al viewport. */
 .fondo {
   position: absolute;
   inset: 0;
@@ -46,7 +44,6 @@
   font-size: var(--text-base);
 }
 
-/* Contenedor con aspecto reservado: sin saltos de layout */
 .mapaWrap {
   position: relative;
   width: 100%;
@@ -68,7 +65,6 @@
   opacity: 1;
 }
 
-/* Skeleton con shimmer mientras el iframe carga */
 .skeleton {
   position: absolute;
   inset: 0;

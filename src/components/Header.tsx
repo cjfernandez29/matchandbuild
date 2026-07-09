@@ -5,7 +5,6 @@ import styles from './Header.module.css'
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-/** Header fijo claro: logo SVG, countdown compacto y botón "Regístrate". */
 function Header() {
   const cuenta = useCountdown(EVENT.fechaInicio)
 

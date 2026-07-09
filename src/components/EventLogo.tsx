@@ -1,14 +1,9 @@
 import styles from './EventLogo.module.css'
 
 interface EventLogoProps {
-  /** Variante clara para fondos oscuros (footer). */
   light?: boolean
 }
 
-/**
- * Logo del evento recreado en SVG: dos piezas de rompecabezas
- * interlocadas (fucsia + cian, como el afiche) + wordmark.
- */
 function EventLogo({ light = false }: EventLogoProps) {
   return (
     <span className={`${styles.logo} ${light ? styles.light : ''}`}>

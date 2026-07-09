@@ -7,15 +7,9 @@ export type EstadoLinea = 'idle' | 'activa' | 'reclutada'
 interface ConnectorLineProps {
   role: Role
   estado: EstadoLinea
-  /** prefers-reduced-motion: la línea hace fade en vez de recorrido. */
   reducida: boolean
 }
 
-/**
- * Línea conectora esquina → centro en el plano del tablero.
- * Capa base tenue siempre visible + capa brillante que se "enciende"
- * recorriendo la línea con dash-offset (pathLength normalizado a 100).
- */
 function ConnectorLine({ role, estado, reducida }: ConnectorLineProps) {
   const desde = POSICIONES[role]
   const hasta = POSICIONES.ceo

@@ -1,18 +1,8 @@
-/**
- * Configuración central del evento — Match & Build Challenge.
- *
- * TODO el contenido editable de la landing vive aquí: fechas, URLs,
- * textos de secciones y mensajes del juego. Los componentes solo leen
- * de este archivo; para cambiar contenido no hace falta tocarlos.
- */
-
-/** Colores de rol disponibles (tokens en src/styles/tokens.css). */
 export type RoleColor = 'tecnologia' | 'marketing' | 'operaciones' | 'finanzas';
 
 export interface EventConfig {
   nombre: string;
   lema: string;
-  /** ISO con zona horaria de Perú (UTC-5). */
   fechaInicio: string;
   urlRegistro: string;
   lugar: {
@@ -39,13 +29,11 @@ export interface EventConfig {
   redes: { nombre: 'instagram' | 'facebook' | 'tiktok'; url: string; habilitado: boolean }[];
   hashtags: string[];
   ctaFinal: { texto: string; boton: string };
-  /** Textos del juego TeamBuilderGame. */
   juego: {
     hudLabel: string;
     ceoBubbleIdle: string;
     candidatoBubbleIdle: string;
     candidatoBubbleGo: string;
-    /** `{titulo}` se reemplaza por el título C-level reclutado. */
     ceoReaccion: string;
     roles: Record<
       RoleColor,
@@ -107,7 +95,6 @@ export const EVENT: EventConfig = {
     },
   ],
 
-  // Hitos placeholder — edítalos con el programa real antes de publicar.
   agenda: [
     {
       dia: 'Jueves 04 de septiembre',
@@ -133,7 +120,6 @@ export const EVENT: EventConfig = {
     },
   ],
 
-  // Placeholders intencionales — el contenido real se define después.
   premios: [
     { puesto: '1.er puesto', titulo: 'Sorpresa 🎁', descripcion: 'Muy pronto revelaremos el premio mayor.' },
     { puesto: '2.º puesto', titulo: 'Sorpresa 🎁', descripcion: 'Algo especial espera al segundo lugar.' },
@@ -175,7 +161,6 @@ export const EVENT: EventConfig = {
     { nombre: 'CIP – Lambayeque', logo: '/logos/logo_colegioIngenieros.png' },
   ],
 
-  // Deshabilitadas hasta tener las URLs oficiales: pon la URL y habilitado: true.
   redes: [
     { nombre: 'instagram', url: '', habilitado: false },
     { nombre: 'facebook', url: '', habilitado: false },

@@ -59,7 +59,6 @@
     align-items: end;
   }
 
-  /* Efecto podio: el 1.er puesto al centro y más alto */
   .puesto1 {
     order: 2;
     padding-block: var(--space-8);

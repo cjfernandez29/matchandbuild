@@ -1,8 +1,3 @@
-/* ============================================================
-   Panel oscuro del juego (estilo vite.dev): viñeta radial,
-   tablero isométrico con grid tenue y plataformas con glow.
-   ============================================================ */
-
 .panel {
   position: relative;
   width: 100%;
@@ -42,10 +37,6 @@
   padding-block: var(--space-8) var(--space-4);
 }
 
-/* ---- Tablero ----
-   Mobile-first: vista 2D cenital. En ≥768px el tablero rota a
-   isométrico (rotateX + rotateZ) y los personajes se "levantan"
-   con la contra-rotación de .standUp. */
 .board {
   position: relative;
   width: min(320px, 88vw);
@@ -66,7 +57,6 @@
   height: 100%;
 }
 
-/* Punto de anclaje de cada plataforma/personaje en el tablero */
 .spot {
   position: absolute;
   width: 0;
@@ -74,7 +64,6 @@
   transform-style: preserve-3d;
 }
 
-/* Plataforma plana (en el plano del tablero) con glow estático */
 .platform {
   position: absolute;
   left: 0;
@@ -90,8 +79,6 @@
     inset 0 0 14px color-mix(in srgb, var(--spot-color) 25%, transparent);
 }
 
-/* Capa de glow intensificado pre-renderizada: en hover solo cambia
-   opacity (nada de animar box-shadow → 60 fps, riesgo 3 del spec). */
 .platform::after {
   content: '';
   position: absolute;
@@ -111,7 +98,6 @@
   --plat-size: 112px;
 }
 
-/* Check tenue en la plataforma vacía tras el reclutamiento */
 .check {
   position: absolute;
   inset: 0;
@@ -124,8 +110,6 @@
   animation: aparecer 0.5s ease;
 }
 
-/* Capa del viaje: Framer Motion anima translate x/y aquí, en
-   coordenadas locales del tablero (pre-transform 3D). */
 .mover {
   position: absolute;
   left: 0;
@@ -133,12 +117,9 @@
   width: 0;
   height: 0;
   transform-style: preserve-3d;
-  /* will-change puntual: es la única capa que viaja por el tablero */
   will-change: transform;
 }
 
-/* El personaje se planta con los pies en el punto de anclaje.
-   En 2D solo se centra; en isométrico se contra-rota (billboard). */
 .standUp {
   position: absolute;
   left: 0;
@@ -147,9 +128,6 @@
   transform-origin: 0 0;
 }
 
-/* Igual que .standUp, pero para la torre: su base (cimiento) coincide
-   con el borde inferior del viewBox de BlocksBuild, no con un margen
-   bajo los "pies" como en los personajes, así que el anclaje es -100%. */
 .standUpTorre {
   position: absolute;
   left: 0;
@@ -165,7 +143,6 @@
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-1);
-  /* Touch target ≥44px */
   min-width: 44px;
   min-height: 44px;
   --char-w: 52px;
@@ -202,7 +179,6 @@
   border-top-color: var(--color-white);
 }
 
-/* Globo "¡Elígeme!" en idle: pulso suave; en nudge, pulso intenso */
 .bubblePulse {
   animation: bubblePulse 1.6s ease-in-out infinite;
 }
@@ -211,7 +187,6 @@
   animation: bubbleNudge 0.7s ease-in-out infinite;
 }
 
-/* Globo del reclutado minimizado: reaparece en hover/focus */
 .bubbleTooltip {
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -223,8 +198,6 @@
   opacity: 1;
 }
 
-/* Idle: candidatos rebotan, el CEO respira. En nudge el salto es
-   más fuerte. Aplicado al avatar (el botón lo anima Framer). */
 .avatarBounce {
   display: block;
   animation: bounce var(--t-bounce, 1.8s) ease-in-out infinite;
@@ -240,7 +213,6 @@
   animation: breath var(--t-breath, 2.4s) ease-in-out infinite;
 }
 
-/* Destello radial de la transformación C-level */
 .flash {
   position: absolute;
   left: 50%;
@@ -253,7 +225,6 @@
   pointer-events: none;
 }
 
-/* Estela de partículas: un solo canvas sobre todo el panel */
 .trailCanvas {
   position: absolute;
   inset: 0;
@@ -263,7 +234,6 @@
   z-index: 8;
 }
 
-/* Texto tipo consola durante la construcción de la torre */
 .console {
   position: absolute;
   top: var(--space-12);
@@ -292,13 +262,11 @@
   animation-delay: 0.4s;
 }
 
-/* Salto en ola durante la celebración (delay por personaje inline) */
 .avatarCelebra {
   display: block;
   animation: salto 0.65s ease-in-out infinite;
 }
 
-/* Tarjeta final sobre la escena */
 .winCardWrap {
   position: absolute;
   inset: 0;
@@ -468,7 +436,6 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  /* Aclarado sobre navy para contraste AA (el morado puro no llega) */
   color: color-mix(in srgb, var(--spot-color, var(--color-white)) 55%, white);
   background: rgba(13, 18, 48, 0.75);
   border: 1px solid var(--spot-color, rgba(255, 255, 255, 0.3));
@@ -477,7 +444,6 @@
   white-space: nowrap;
 }
 
-/* ---- Vista isométrica (≥768px) ---- */
 @media (min-width: 768px) {
   .panel {
     padding: var(--space-6);
@@ -489,15 +455,10 @@
 
   .board {
     width: min(520px, 60vw);
-    /* Isométrico estilo vite.dev (proyección paralela, sin perspective) */
     transform: rotateX(54deg) rotateZ(45deg);
-    /* Sin margen negativo arriba: deja aire para el globo "¡Elígeme!"
-       del personaje superior (Tecnología), que antes quedaba cortado. */
     margin-block: 0 -20px;
   }
 
-  /* Billboard: deshace la rotación del tablero para que el personaje
-     quede de pie, girando sobre su punto de apoyo. */
   .standUp {
     transform: rotateZ(-45deg) rotateX(-54deg) translate(-50%, -92%);
   }

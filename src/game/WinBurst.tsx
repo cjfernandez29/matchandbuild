@@ -19,12 +19,6 @@ interface Pieza {
   color: string
 }
 
-/**
- * Celebración del win: "¡WIN!" con efecto stamp + confeti en canvas
- * propio (sin dependencias) con los 5 colores del evento: explosión
- * inicial desde el centro + lluvia durante confettiDuration.
- * Con prefers-reduced-motion no hay confeti y el "¡WIN!" hace fade.
- */
 function WinBurst({ reducida }: { reducida: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 

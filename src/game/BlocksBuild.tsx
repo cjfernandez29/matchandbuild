@@ -4,10 +4,9 @@ import { TIMINGS } from './timings'
 import { NIVELES_EDIFICIO, delayNivel } from './buildTimeline'
 import styles from './BlocksBuild.module.css'
 
-const LADO_H = 30 // alto de las caras laterales del cubo = paso de apilado
-const BASE_Y = 178 // y local del nivel 0 (cimiento), igual en toda la torre
+const LADO_H = 30
+const BASE_Y = 178
 
-/** Cubo isométrico: cara superior plena + laterales sombreados. */
 function Cubo({ color }: { color: string }) {
   return (
     <g>
@@ -20,7 +19,6 @@ function Cubo({ color }: { color: string }) {
   )
 }
 
-/** Ventanita iluminada sobre la cara derecha (sigue su inclinación isométrica). */
 function Ventana({ x, y }: { x: number; y: number }) {
   return (
     <rect
@@ -36,7 +34,6 @@ function Ventana({ x, y }: { x: number; y: number }) {
   )
 }
 
-/** Puerta sobre la cara izquierda del cimiento. */
 function Puerta() {
   return (
     <rect
@@ -53,38 +50,21 @@ function Puerta() {
 
 interface BlocksBuildProps {
   reducida: boolean
-  /** Se dispara al asentarse el banderín → BUILD_DONE. */
   onComplete: () => void
 }
 
-/**
- * Edificio final: se arma piso por piso (cimiento con puerta, un
- * piso por rol con ventanas que se encienden, techo) coronado por un
- * letrero luminoso "STARTUP". Reusa NIVELES_EDIFICIO/delayNivel para
- * que TeamBuilderGame dispare el pulso de partículas de cada
- * personaje justo cuando su piso cae. Con prefers-reduced-motion
- * todo aparece con fades.
- */
 function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
   const ultimo = NIVELES_EDIFICIO.length - 1
-  const tope = BASE_Y - ultimo * LADO_H // y local del vértice superior del techo
+  const tope = BASE_Y - ultimo * LADO_H
   const minY = tope - 58
   const alto = BASE_Y + 66 - minY
   const delaySign = delayNivel(NIVELES_EDIFICIO.length, reducida)
-
-  console.log('[BlocksBuild] render', {
-    reducida,
-    niveles: NIVELES_EDIFICIO.map((n) => n.key),
-    viewBox: `-26 ${minY} 124 ${alto}`,
-    delaySign,
-  })
 
   return (
     <svg className={styles.svg} viewBox={`-26 ${minY} 124 ${alto}`} aria-hidden="true">
       {NIVELES_EDIFICIO.map((nivel, i) => {
         const color = nivel.role ? ROLE_HEX[nivel.role] : '#1c2454'
         const delay = delayNivel(i, reducida)
-        console.log('[BlocksBuild] nivel', nivel.key, { i, color, delay })
         return (
           <g key={nivel.key} transform={`translate(0 ${BASE_Y - i * LADO_H})`}>
             <motion.g
@@ -95,13 +75,11 @@ function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
                   ? { delay, duration: 0.25 }
                   : { delay, duration: TIMINGS.blockDrop, ease: 'backOut' }
               }
-              onAnimationComplete={() => console.log('[BlocksBuild] piso asentado:', nivel.key)}
             >
               <Cubo color={color} />
               {i === 0 && <Puerta />}
             </motion.g>
 
-            {/* Ventanas: se encienden apenas el piso se asienta */}
             {nivel.role && (
               <>
                 <motion.g
@@ -132,7 +110,6 @@ function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
         )
       })}
 
-      {/* Letrero "STARTUP" en la cima: cierra la secuencia */}
       <motion.g
         className={styles.sign}
         initial={reducida ? { opacity: 0 } : { opacity: 0, y: -110 }}
@@ -142,10 +119,7 @@ function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
             ? { delay: delaySign, duration: 0.25 }
             : { delay: delaySign, duration: TIMINGS.blockDrop, ease: 'backOut' }
         }
-        onAnimationComplete={() => {
-          console.log('[BlocksBuild] letrero STARTUP asentado -> onComplete (BUILD_DONE)')
-          onComplete()
-        }}
+        onAnimationComplete={onComplete}
       >
         <rect x="34.8" y={tope - 24} width="2.4" height="24" rx="1.2" fill="#e8ecff" />
         <rect

@@ -3,17 +3,11 @@ import { EVENT } from '../config/event'
 import SectionTitle from './SectionTitle'
 import styles from './Ubicacion.module.css'
 
-/**
- * Ubicación: fondo de Chiclayo (img lazy con overlay oscuro),
- * dirección, mapa embed de Google Maps con skeleton hasta onLoad
- * y botón "Cómo llegar" como vía alternativa si el iframe falla.
- */
 function Ubicacion() {
   const [mapaCargado, setMapaCargado] = useState(false)
 
   return (
     <section className={styles.section}>
-      {/* Fondo decorativo lazy: no bloquea la carga inicial */}
       <img
         className={styles.fondo}
         src="/fondo/fondo_chiclayo.jpg"

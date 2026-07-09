@@ -1,5 +1,3 @@
-/* Reset y estilos base — Match & Build Challenge */
-
 *,
 *::before,
 *::after {
@@ -74,8 +72,6 @@ ol {
   outline-offset: 2px;
 }
 
-/* ---- Utilidades globales ---- */
-
 .container {
   width: 100%;
   max-width: var(--container-max);
@@ -89,7 +85,6 @@ ol {
   }
 }
 
-/* Solo para lectores de pantalla */
 .sr-only {
   position: absolute;
   width: 1px;

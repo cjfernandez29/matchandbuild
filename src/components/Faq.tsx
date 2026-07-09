@@ -3,11 +3,6 @@ import { EVENT } from '../config/event'
 import SectionTitle from './SectionTitle'
 import styles from './Faq.module.css'
 
-/**
- * Acordeón accesible: cada pregunta es un <button> con aria-expanded
- * y aria-controls; el panel se referencia con id + aria-labelledby.
- * Operable con mouse y teclado (Tab + Enter/Espacio nativos del button).
- */
 function Faq() {
   const [abierta, setAbierta] = useState<number | null>(null)
 

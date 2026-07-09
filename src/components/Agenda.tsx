@@ -2,7 +2,6 @@ import { EVENT } from '../config/event'
 import SectionTitle from './SectionTitle'
 import styles from './Agenda.module.css'
 
-/** Timeline vertical de los 2 días, con hitos editables en config. */
 function Agenda() {
   return (
     <section className={styles.section}>

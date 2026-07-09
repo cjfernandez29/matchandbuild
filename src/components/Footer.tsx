@@ -28,11 +28,6 @@ const ICONOS: Record<'instagram' | 'facebook' | 'tiktok', React.ReactNode> = {
   ),
 }
 
-/**
- * Footer azul marino: logo, organizadores, hashtags y redes.
- * Los iconos de redes se muestran deshabilitados hasta que en
- * config se ponga la URL y habilitado: true.
- */
 function Footer() {
   return (
     <footer className={styles.footer}>

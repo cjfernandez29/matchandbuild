@@ -2,7 +2,6 @@ import { EVENT } from '../config/event'
 import SectionTitle from './SectionTitle'
 import styles from './QueViviras.module.css'
 
-/** 4 cards con hover lift y borde superior del color de su rol. */
 function QueViviras() {
   return (
     <section className={styles.section}>

@@ -34,7 +34,6 @@
   padding-left: var(--space-1);
 }
 
-/* Línea vertical del timeline */
 .timeline::before {
   content: '';
   position: absolute;

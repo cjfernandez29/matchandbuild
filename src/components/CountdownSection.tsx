@@ -5,7 +5,6 @@ import styles from './CountdownSection.module.css'
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-/** Countdown grande días/horas/min/seg hacia fechaInicio, sin drift. */
 function CountdownSection() {
   const cuenta = useCountdown(EVENT.fechaInicio)
 

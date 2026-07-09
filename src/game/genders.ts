@@ -4,12 +4,6 @@ export type Gender = 'f' | 'm'
 
 const PERSONAJES: (Role | 'ceo')[] = [...ROLES, 'ceo']
 
-/**
- * Sortea el género de los 5 personajes en cada carga (y en cada
- * "Jugar de nuevo"), garantizando al menos 2 femeninos y 2
- * masculinos: se barajan los personajes, los 2 primeros son 'f',
- * los 2 siguientes 'm' y el quinto sale al azar.
- */
 export function sortearGeneros(): Record<Role | 'ceo', Gender> {
   const orden = [...PERSONAJES]
   for (let i = orden.length - 1; i > 0; i--) {

@@ -49,7 +49,6 @@
   transform: rotate(180deg);
 }
 
-/* Truco de grid-rows para animar la apertura sin medir alturas */
 .panel {
   display: grid;
   grid-template-rows: 0fr;

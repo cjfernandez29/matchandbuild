@@ -5,7 +5,6 @@ export interface CountdownState {
   horas: number
   minutos: number
   segundos: number
-  /** true cuando la fecha objetivo ya pasó → "¡El evento comenzó!". */
   comenzo: boolean
 }
 
@@ -24,11 +23,6 @@ function calcular(target: number): CountdownState {
   }
 }
 
-/**
- * Cuenta regresiva sin drift: cada tick recalcula contra Date.now()
- * (no acumula intervalos) y el timeout se alinea al inicio del
- * siguiente segundo real.
- */
 export function useCountdown(fechaIso: string): CountdownState {
   const target = useMemo(() => new Date(fechaIso).getTime(), [fechaIso])
   const [state, setState] = useState<CountdownState>(() => calcular(target))

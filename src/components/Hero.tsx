@@ -2,7 +2,6 @@ import { EVENT } from '../config/event'
 import TeamBuilderGame from '../game/TeamBuilderGame'
 import styles from './Hero.module.css'
 
-/** Hero: copy del evento sobre el panel oscuro del juego. */
 function Hero() {
   return (
     <section className={styles.hero}>

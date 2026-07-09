@@ -7,22 +7,22 @@ export type { Role, Gender }
 
 export type GamePhase =
   | { name: 'idle' }
-  | { name: 'recruiting'; role: Role } // un personaje viajando al centro
-  | { name: 'building' } // torre de bloques levantándose
-  | { name: 'win' } // celebración + tarjeta final
+  | { name: 'recruiting'; role: Role }
+  | { name: 'building' }
+  | { name: 'win' }
 
 export interface GameState {
   phase: GamePhase
-  recruited: Role[] // orden de reclutamiento (0–4)
-  queue: Role[] // clicks encolados durante un viaje
-  genders: Record<Role | 'ceo', Gender> // sorteados al montar y en cada RESET
+  recruited: Role[]
+  queue: Role[]
+  genders: Record<Role | 'ceo', Gender>
 }
 
 export type GameAction =
-  | { type: 'CLICK_CANDIDATE'; role: Role } // encola o inicia viaje según fase
-  | { type: 'TRAVEL_DONE'; role: Role } // llegó al centro → recruited; procesa cola
-  | { type: 'BUILD_DONE' } // torre completa → win
-  | { type: 'RESET' } // "Jugar de nuevo" (re-sortea géneros)
+  | { type: 'CLICK_CANDIDATE'; role: Role }
+  | { type: 'TRAVEL_DONE'; role: Role }
+  | { type: 'BUILD_DONE' }
+  | { type: 'RESET' }
 
 export function initGameState(): GameState {
   return {
@@ -34,7 +34,6 @@ export function initGameState(): GameState {
 }
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
-  console.log('[reducer] action', action, 'phase antes', state.phase)
   switch (action.type) {
     case 'CLICK_CANDIDATE': {
       const { role } = action
@@ -47,12 +46,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         if (state.phase.role === role) return state
         return { ...state, queue: [...state.queue, role] }
       }
-      // building / win: se ignora
       return state
     }
 
     case 'TRAVEL_DONE': {
-      // Idempotente: solo procesa el viaje en curso (StrictMode-safe)
       if (state.phase.name !== 'recruiting' || state.phase.role !== action.role) {
         return state
       }
@@ -63,14 +60,12 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         return { ...state, recruited, queue: resto, phase: { name: 'recruiting', role: siguiente } }
       }
       if (recruited.length === ROLES.length) {
-        console.log('[reducer] 5/5 reclutados -> phase building')
         return { ...state, recruited, queue: [], phase: { name: 'building' } }
       }
       return { ...state, recruited, queue: [], phase: { name: 'idle' } }
     }
 
     case 'BUILD_DONE':
-      console.log('[reducer] BUILD_DONE recibido, phase actual:', state.phase.name)
       return state.phase.name === 'building' ? { ...state, phase: { name: 'win' } } : state
 
     case 'RESET':

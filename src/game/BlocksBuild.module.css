@@ -1,24 +1,11 @@
 .svg {
-  /* El wrapper (.standUpTorre) ancla la torre por su base al spot del
-     CEO (centro del tablero) con translate(-100%) en vertical. El
-     panel tiene overflow:hidden y poco padding arriba del tablero,
-     así que el ancho debe mantener la torre lo bastante baja como
-     para no quedar recortada (ver TeamBuilderGame.module.css
-     .panel/.scene). */
   width: 78px;
   height: auto;
   display: block;
-  /* El reset global (index.css) pone max-width:100% en todo <svg>.
-     .standUpTorre no tiene ancho propio (encoge a su contenido), así
-     que ese 100% referencia un contenedor cuyo tamaño depende de ESTE
-     mismo svg → referencia circular que el navegador resuelve como 0,
-     colapsando el edificio a 0×0 aunque se siga animando. Se anula
-     aquí para que el width:78px de arriba realmente se aplique. */
   max-width: none;
   filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.45));
 }
 
-/* Letrero "STARTUP": glow cyan tipo neón sobre la torre */
 .sign {
   filter: drop-shadow(0 0 10px rgba(0, 194, 255, 0.65));
 }

@@ -2,7 +2,6 @@ import { EVENT } from '../config/event'
 import SectionTitle from './SectionTitle'
 import styles from './Premios.module.css'
 
-/** Podio de 3 cards de premios (placeholders editables en config). */
 function Premios() {
   return (
     <section className={styles.section}>
