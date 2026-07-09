@@ -422,7 +422,20 @@ function TeamBuilderGame() {
                   : undefined
 
             return (
-              <div key={role} className={styles.spot} style={estiloSpot(role)}>
+              <div
+                key={role}
+                className={styles.spot}
+                style={estiloSpot(role)}
+                onClick={() => !reclutado && !viajando && dispatch({ type: 'CLICK_CANDIDATE', role })}
+                role={esperando ? 'button' : undefined}
+                tabIndex={esperando ? 0 : undefined}
+                onKeyDown={(e) => {
+                  if (esperando && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault()
+                    dispatch({ type: 'CLICK_CANDIDATE', role })
+                  }
+                }}
+              >
                 <div className={styles.platform} aria-hidden="true">
                   {reclutado && <span className={styles.check}>✓</span>}
                 </div>
