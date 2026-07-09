@@ -279,17 +279,30 @@ function TeamBuilderGame() {
         } as React.CSSProperties
       }
     >
-      <p className={styles.hud} aria-live="polite">
-        {juego.hudLabel}{' '}
-        <motion.span
-          key={contador}
-          className={styles.hudContador}
-          initial={reducedMotion ? false : { scale: 1.5 }}
-          animate={{ scale: 1 }}
-        >
-          {contador}/5
-        </motion.span>
-      </p>
+      <div className={styles.hudContainer}>
+        <p className={styles.hud} aria-live="polite">
+          {juego.hudLabel}{' '}
+          <motion.span
+            key={contador}
+            className={styles.hudContador}
+            initial={reducedMotion ? false : { scale: 1.5 }}
+            animate={{ scale: 1 }}
+          >
+            {contador}/5
+          </motion.span>
+        </p>
+
+        {!enFinal && (
+          <motion.div
+            className={styles.ceoBubbleDisplay}
+            key={textoCeo}
+            initial={reducedMotion ? false : { scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <div className={styles.ceoBubbleText}>CEO: {textoCeo}</div>
+          </motion.div>
+        )}
+      </div>
 
       {construyendo && (
         <p className={styles.console}>
@@ -341,16 +354,6 @@ function TeamBuilderGame() {
             >
               <div className={styles.standUp}>
                 <div className={styles.figure}>
-                  {!enFinal && (
-                    <motion.span
-                      key={textoCeo}
-                      className={styles.bubble}
-                      initial={reducedMotion ? false : { scale: 0.6, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                    >
-                      {textoCeo}
-                    </motion.span>
-                  )}
                   <span
                     className={gano && !reducedMotion ? styles.avatarCelebra : styles.avatarBreath}
                     style={gano ? { animationDelay: '0.48s' } : undefined}
