@@ -5,6 +5,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import {
   FORMACION,
   FORMACION_FINAL,
+  FORMACION_FINAL_MOBILE,
   POSICIONES,
   ROLES,
   ROLE_HEX,
@@ -74,12 +75,18 @@ function TeamBuilderGame() {
   })
 
   const [boardSize, setBoardSize] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     const el = boardRef.current
     if (!el) return
-    const ro = new ResizeObserver(() => setBoardSize(el.offsetWidth))
+    const ro = new ResizeObserver(() => {
+      setBoardSize(el.offsetWidth)
+      setIsMobile(el.offsetWidth < 400)
+    })
     ro.observe(el)
-    setBoardSize(el.offsetWidth)
+    const size = el.offsetWidth
+    setBoardSize(size)
+    setIsMobile(size < 400)
     return () => ro.disconnect()
   }, [])
 
@@ -280,7 +287,8 @@ function TeamBuilderGame() {
     ? { duration: 0.05 }
     : { delay: TIMINGS.regroupDelay, duration: TIMINGS.regroup, ease: 'easeInOut' as const }
 
-  const ceoOffset = enFinal ? offset('ceo', FORMACION_FINAL.ceo) : { x: 0, y: 0 }
+  const formacionFinalActual = isMobile ? FORMACION_FINAL_MOBILE : FORMACION_FINAL
+  const ceoOffset = enFinal ? offset('ceo', formacionFinalActual.ceo) : { x: 0, y: 0 }
 
   return (
     <div
@@ -387,7 +395,8 @@ function TeamBuilderGame() {
             const enCola = state.queue.includes(role)
             const esperando = !reclutado && !viajando && !enCola
 
-            const destino = reclutado && enFinal ? FORMACION_FINAL[role] : FORMACION[role]
+            const formacionFinalActual = isMobile ? FORMACION_FINAL_MOBILE : FORMACION_FINAL
+            const destino = reclutado && enFinal ? formacionFinalActual[role] : FORMACION[role]
             const desplazamiento =
               reclutado || viajando ? offset(role, destino) : { x: 0, y: 0 }
 

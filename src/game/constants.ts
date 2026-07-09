@@ -27,6 +27,14 @@ export const FORMACION_FINAL: Record<Role | 'ceo', { x: number; y: number }> = {
   marketing: { x: 90, y: 35 },
 }
 
+export const FORMACION_FINAL_MOBILE: Record<Role | 'ceo', { x: number; y: number }> = {
+  tecnologia: { x: 28, y: 32 },
+  marketing: { x: 72, y: 32 },
+  operaciones: { x: 22, y: 72 },
+  finanzas: { x: 78, y: 72 },
+  ceo: { x: 50, y: 78 },
+}
+
 export const ROLE_HEX: Record<Role | 'ceo', string> = {
   tecnologia: '#00c2ff',
   marketing: '#ff2e7e',
