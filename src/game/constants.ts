@@ -31,15 +31,16 @@ export const FORMACION: Record<Role, { x: number; y: number }> = {
 }
 
 /**
- * Posiciones del final: los 5 se reagrupan al borde inferior del
- * tablero mirando al centro mientras la torre se construye.
+ * Posiciones del final: los 5 rodean la torre en semicírculo frontal
+ * (arco de izquierda a derecha en pantalla, por delante del centro)
+ * mientras la construcción sube. Bien espaciados para no solaparse.
  */
 export const FORMACION_FINAL: Record<Role | 'ceo', { x: number; y: number }> = {
-  ceo: { x: 50, y: 86 },
-  tecnologia: { x: 18, y: 62 },
-  marketing: { x: 82, y: 62 },
-  operaciones: { x: 32, y: 82 },
-  finanzas: { x: 68, y: 82 },
+  operaciones: { x: 35, y: 90 },
+  tecnologia: { x: 56, y: 88 },
+  ceo: { x: 76, y: 76 },
+  finanzas: { x: 88, y: 56 },
+  marketing: { x: 90, y: 35 },
 }
 
 /** Hex reales de los tokens, para dibujar partículas en canvas. */

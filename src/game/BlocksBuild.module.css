@@ -1,12 +1,25 @@
 .svg {
-  width: 92px;
+  width: 165px;
   height: auto;
   display: block;
   filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.45));
 }
 
+/* Letrero "STARTUP": glow cyan tipo neón sobre la torre */
+.sign {
+  filter: drop-shadow(0 0 10px rgba(0, 194, 255, 0.65));
+}
+
+.signText {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: #dff6ff;
+}
+
 @media (min-width: 768px) {
   .svg {
-    width: 116px;
+    width: 210px;
   }
 }

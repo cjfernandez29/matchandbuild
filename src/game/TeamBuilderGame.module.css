@@ -480,7 +480,9 @@
     width: min(520px, 60vw);
     /* Isométrico estilo vite.dev (proyección paralela, sin perspective) */
     transform: rotateX(54deg) rotateZ(45deg);
-    margin-block: -40px -20px;
+    /* Sin margen negativo arriba: deja aire para el globo "¡Elígeme!"
+       del personaje superior (Tecnología), que antes quedaba cortado. */
+    margin-block: 0 -20px;
   }
 
   /* Billboard: deshace la rotación del tablero para que el personaje

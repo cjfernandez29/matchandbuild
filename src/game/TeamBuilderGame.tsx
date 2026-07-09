@@ -395,7 +395,10 @@ function TeamBuilderGame() {
                       animate={reclutado && !reducedMotion ? { scale: [1, 1.2, 1] } : { scale: 1 }}
                       transition={{ duration: TIMINGS.transformFlash }}
                     >
-                      <span className={bubbleClases.join(' ')}>{bubbleTexto}</span>
+                      {/* Sin globos en building/win: taparían la torre */}
+                      {!enFinal && (
+                        <span className={bubbleClases.join(' ')}>{bubbleTexto}</span>
+                      )}
                       {reclutado && recienLlegado === role && !reducedMotion && (
                         <motion.span
                           className={styles.flash}

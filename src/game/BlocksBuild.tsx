@@ -30,8 +30,8 @@ interface BlocksBuildProps {
 
 /**
  * Torre final: 5 cubos isométricos (uno por color de rol + CEO) que
- * caen y se apilan con stagger y rebote, coronados por un banderín.
- * Con prefers-reduced-motion los bloques aparecen con fades.
+ * caen y se apilan con stagger y rebote, coronados por un letrero
+ * luminoso "STARTUP". Con prefers-reduced-motion aparecen con fades.
  */
 function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
   const contenedor: Variants = {
@@ -59,7 +59,7 @@ function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
   return (
     <motion.svg
       className={styles.svg}
-      viewBox="0 0 72 244"
+      viewBox="-26 0 124 244"
       initial="hidden"
       animate="visible"
       variants={contenedor}
@@ -73,10 +73,26 @@ function BlocksBuild({ reducida, onComplete }: BlocksBuildProps) {
         </g>
       ))}
 
-      {/* Banderín en la punta (último hijo: cierra la secuencia) */}
-      <motion.g variants={bloque} onAnimationComplete={onComplete}>
-        <rect x="34.8" y="16" width="2.4" height="42" rx="1.2" fill="#e8ecff" />
-        <path d="M37 16l24 9-24 9z" fill={ROLE_HEX.marketing} />
+      {/* Letrero "STARTUP" en la cima (último hijo: cierra la secuencia) */}
+      <motion.g
+        className={styles.sign}
+        variants={bloque}
+        onAnimationComplete={onComplete}
+      >
+        <rect x="34.8" y="34" width="2.4" height="26" rx="1.2" fill="#e8ecff" />
+        <rect
+          x="-22"
+          y="6"
+          width="116"
+          height="30"
+          rx="8"
+          fill="#0d1230"
+          stroke={ROLE_HEX.tecnologia}
+          strokeWidth="1.5"
+        />
+        <text className={styles.signText} x="36" y="27" textAnchor="middle">
+          STARTUP
+        </text>
       </motion.g>
     </motion.svg>
   )
