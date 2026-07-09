@@ -18,6 +18,7 @@
   letter-spacing: 0.04em;
   color: var(--color-navy);
   white-space: nowrap;
+  margin-top: 6px;
 }
 
 .light .wordmark {
