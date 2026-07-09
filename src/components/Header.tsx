@@ -1,28 +1,37 @@
 import { EVENT } from '../config/event'
 import { useCountdown } from '../hooks/useCountdown'
+import { useScrollDirection } from '../hooks/useScrollDirection'
 import EventLogo from './EventLogo'
+import CountdownDisplay from './CountdownDisplay'
 import styles from './Header.module.css'
-
-const pad = (n: number) => String(n).padStart(2, '0')
+import countdownStyles from './HeaderCountdown.module.css'
 
 function Header() {
   const cuenta = useCountdown(EVENT.fechaInicio)
+  const isScrollVisible = useScrollDirection()
 
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <EventLogo />
         <div className={styles.right}>
-          <p className={styles.countdown}>
-            {cuenta.comenzo ? (
-              '¡El evento comenzó!'
-            ) : (
+          <div className={!isScrollVisible ? countdownStyles.hidden : ''}>
+            {isScrollVisible && (
               <>
-                <span className={styles.dias}>{cuenta.dias}d</span>{' '}
-                {pad(cuenta.horas)}:{pad(cuenta.minutos)}:{pad(cuenta.segundos)}
+                {cuenta.comenzo ? (
+                  <p className={styles.message}>¡El evento comenzó!</p>
+                ) : (
+                  <CountdownDisplay
+                    dias={cuenta.dias}
+                    horas={cuenta.horas}
+                    minutos={cuenta.minutos}
+                    segundos={cuenta.segundos}
+                    size="sm"
+                  />
+                )}
               </>
             )}
-          </p>
+          </div>
           <a
             className={styles.cta}
             href={EVENT.urlRegistro}

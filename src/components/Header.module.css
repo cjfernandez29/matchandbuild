@@ -24,17 +24,18 @@
   gap: var(--space-4);
 }
 
-.countdown {
-  font-size: var(--text-xs);
+.message {
+  font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-navy);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.dias {
-  color: var(--color-navy);
-  font-weight: 700;
+@media (max-width: 640px) {
+  .right > :first-child {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {

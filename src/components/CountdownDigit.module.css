@@ -1,0 +1,57 @@
+@keyframes digitFlip {
+  0% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(360deg);
+    opacity: 1;
+  }
+}
+
+.digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #ff9f1c, #ff2e7e, #7b2ff7);
+  color: var(--color-white);
+  font-weight: 700;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-display);
+  box-shadow: 0 4px 12px rgba(255, 47, 126, 0.25);
+  perspective: 1000px;
+}
+
+.digit.sm {
+  width: 35px;
+  height: 35px;
+  font-size: 15px;
+}
+
+.digit.lg {
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
+}
+
+.digit.flip {
+  animation: digitFlip 0.2s ease-out;
+}
+
+@media (max-width: 640px) {
+  .digit.sm {
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+  }
+
+  .digit.lg {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+}

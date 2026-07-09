@@ -1,0 +1,140 @@
+.containerSm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.pairSm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.boxSm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4f46ff, #8b5cf6);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(79, 70, 255, 0.3);
+  padding: 6px 8px;
+  min-width: 40px;
+  height: 35px;
+}
+
+.numbersSm {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-white);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.labelSm {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.separator {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0 2px;
+}
+
+.containerLg {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.unitLg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.boxLg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4f46ff, #8b5cf6);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(79, 70, 255, 0.3);
+  width: 100px;
+  height: 100px;
+}
+
+.numbersLg {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--color-white);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.labelLg {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 640px) {
+  .containerSm {
+    gap: 3px;
+  }
+
+  .pairSm {
+    gap: 3px;
+  }
+
+  .boxSm {
+    padding: 4px 6px;
+    min-width: 35px;
+    height: 25px;
+  }
+
+  .numbersSm {
+    font-size: 12px;
+  }
+
+  .labelSm {
+    font-size: 8px;
+  }
+
+  .separator {
+    font-size: 12px;
+    margin: 0 1px;
+  }
+
+  .containerLg {
+    gap: 12px;
+  }
+
+  .unitLg {
+    gap: 6px;
+  }
+
+  .boxLg {
+    width: 70px;
+    height: 70px;
+  }
+
+  .numbersLg {
+    font-size: 32px;
+  }
+
+  .labelLg {
+    font-size: 12px;
+  }
+}
