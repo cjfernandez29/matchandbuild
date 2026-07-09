@@ -50,7 +50,7 @@ export const EVENT: EventConfig = {
   nombre: 'Match & Build Challenge',
   lema: 'Conecta. Lidera. Construye el futuro.',
   fechaInicio: '2026-09-04T15:00:00-05:00',
-  urlRegistro: 'https://somosnomadas.vercel.app/',
+  urlRegistro: 'https://somosnomadas.vercel.app/onboarding',
 
   lugar: {
     nombre: 'Auditorio – 5.º piso, Colegio de Ingenieros del Perú',
