@@ -2,11 +2,13 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  text-decoration: none;
 }
 
-.icon {
-  width: 32px;
-  height: 28px;
+.logoImage {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
@@ -27,6 +29,12 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+@media (min-width: 640px) {
+  .wordmark {
+    font-size: var(--text-base);
+  }
 }
 
 @media (min-width: 640px) {
