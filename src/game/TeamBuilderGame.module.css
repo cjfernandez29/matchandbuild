@@ -147,6 +147,17 @@
   transform-origin: 0 0;
 }
 
+/* Igual que .standUp, pero para la torre: su base (cimiento) coincide
+   con el borde inferior del viewBox de BlocksBuild, no con un margen
+   bajo los "pies" como en los personajes, así que el anclaje es -100%. */
+.standUpTorre {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -100%);
+  transform-origin: 0 0;
+}
+
 .figure {
   position: relative;
   display: flex;
@@ -489,6 +500,10 @@
      quede de pie, girando sobre su punto de apoyo. */
   .standUp {
     transform: rotateZ(-45deg) rotateX(-54deg) translate(-50%, -92%);
+  }
+
+  .standUpTorre {
+    transform: rotateZ(-45deg) rotateX(-54deg) translate(-50%, -100%);
   }
 
   .platform {

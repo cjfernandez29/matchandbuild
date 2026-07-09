@@ -10,6 +10,7 @@ import {
   ROLE_HEX,
   type Role,
 } from './constants'
+import { NIVELES_EDIFICIO, delayNivel } from './buildTimeline'
 import { gameReducer, initGameState } from './gameReducer'
 import { TIMINGS } from './timings'
 import Character from './Character'
@@ -28,6 +29,15 @@ interface Particula {
   radio: number
 }
 
+/** Pulso de "contribución": viaje recto (con arco) de un personaje al edificio. */
+interface Pulso {
+  color: string
+  origen: { x: number; y: number }
+  destino: { x: number; y: number }
+  inicio: number
+  duracion: number
+}
+
 function estiloSpot(personaje: Role | 'ceo'): React.CSSProperties {
   const pos = POSICIONES[personaje]
   return {
@@ -43,9 +53,12 @@ function estiloSpot(personaje: Role | 'ceo'): React.CSSProperties {
  * candidato: la línea se enciende (dash-offset), el personaje viaja
  * al centro con estela de partículas (canvas único), se transforma
  * en C-level y se acomoda en formación. A 4/4 reclutados el equipo
- * se reagrupa al borde, la torre de bloques se construye y estalla
- * la celebración con la tarjeta final. Con prefers-reduced-motion
- * los viajes/confeti se sustituyen por fades (juego completable).
+ * se reagrupa al borde y el edificio se construye piso por piso; cada
+ * piso lo "aporta" su personaje con un pulso de partículas que viaja
+ * hasta el edificio en el mismo instante en que ese piso cae. Al
+ * completarse estalla la celebración con la tarjeta final. Con
+ * prefers-reduced-motion los viajes/pulsos/confeti se sustituyen por
+ * fades (juego completable).
  */
 function TeamBuilderGame() {
   const [state, dispatch] = useReducer(gameReducer, undefined, initGameState)
@@ -56,13 +69,26 @@ function TeamBuilderGame() {
   const gano = state.phase.name === 'win'
   const enFinal = construyendo || gano
 
+  console.log('[TeamBuilderGame] render', {
+    phase: state.phase,
+    recruited: state.recruited,
+    enFinal,
+  })
+
   const panelRef = useRef<HTMLDivElement>(null)
   const trailRef = useRef<HTMLCanvasElement>(null)
   const boardRef = useRef<HTMLDivElement>(null)
+  const torreRef = useRef<HTMLDivElement>(null)
   const registroRef = useRef<HTMLAnchorElement>(null)
   const charRefs = useRef<Partial<Record<Role, HTMLButtonElement | null>>>({})
-  const motor = useRef<{ particulas: Particula[]; raf: number; emitiendo: Role | null }>({
+  const motor = useRef<{
+    particulas: Particula[]
+    pulsos: Pulso[]
+    raf: number
+    emitiendo: Role | null
+  }>({
     particulas: [],
+    pulsos: [],
     raf: 0,
     emitiendo: null,
   })
@@ -125,13 +151,19 @@ function TeamBuilderGame() {
     }
   }, [state.phase.name, state.recruited, reducedMotion, cicloNudge])
 
-  // Estela de partículas del viaje: un solo canvas sobre el panel.
-  // El bucle rAF sigue la posición proyectada del personaje en viaje
-  // y se apaga solo cuando no queda nada que dibujar.
+  // Estela de partículas: un solo canvas sobre el panel, compartido
+  // por dos emisores. En "recruiting" sigue la posición proyectada
+  // del personaje en viaje; en "building" dispara un pulso por rol
+  // (uno de cada personaje reagrupado hacia el edificio) sincronizado
+  // con delayNivel, el mismo reloj que usa BlocksBuild para hacer
+  // caer cada piso: así el pulso "llega" cuando el piso se asienta.
+  // El bucle rAF se apaga solo cuando no queda nada que dibujar.
   useEffect(() => {
-    motor.current.emitiendo =
-      !reducedMotion && state.phase.name === 'recruiting' ? state.phase.role : null
-    if (!motor.current.emitiendo) return
+    const m = motor.current
+    m.emitiendo = !reducedMotion && state.phase.name === 'recruiting' ? state.phase.role : null
+
+    if (reducedMotion) return
+    if (state.phase.name !== 'recruiting' && state.phase.name !== 'building') return
 
     const canvas = trailRef.current
     const panel = panelRef.current
@@ -141,7 +173,6 @@ function TeamBuilderGame() {
     const dpr = window.devicePixelRatio || 1
 
     const paso = () => {
-      const m = motor.current
       const rectPanel = panel.getBoundingClientRect()
       const ancho = Math.round(rectPanel.width * dpr)
       const alto = Math.round(rectPanel.height * dpr)
@@ -170,6 +201,26 @@ function TeamBuilderGame() {
         }
       }
 
+      const ahora = performance.now()
+      m.pulsos = m.pulsos.filter((p) => ahora - p.inicio < p.duracion)
+      for (const p of m.pulsos) {
+        const t = Math.min((ahora - p.inicio) / p.duracion, 1)
+        const arco = Math.sin(t * Math.PI) * 18 * dpr
+        const cx = p.origen.x + (p.destino.x - p.origen.x) * t
+        const cy = p.origen.y + (p.destino.y - p.origen.y) * t - arco
+        for (let i = 0; i < 2; i++) {
+          m.particulas.push({
+            x: cx + (Math.random() - 0.5) * 6 * dpr,
+            y: cy + (Math.random() - 0.5) * 6 * dpr,
+            vx: (Math.random() - 0.5) * 0.4 * dpr,
+            vy: (Math.random() - 0.5) * 0.4 * dpr,
+            vida: 0.7,
+            color: p.color,
+            radio: (Math.random() * 2 + 1.2) * dpr,
+          })
+        }
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       m.particulas = m.particulas.filter((p) => p.vida > 0)
       for (const p of m.particulas) {
@@ -184,7 +235,7 @@ function TeamBuilderGame() {
       }
       ctx.globalAlpha = 1
 
-      if (m.emitiendo || m.particulas.length > 0) {
+      if (m.emitiendo || m.particulas.length > 0 || m.pulsos.length > 0) {
         m.raf = requestAnimationFrame(paso)
       } else {
         m.raf = 0
@@ -192,13 +243,123 @@ function TeamBuilderGame() {
       }
     }
 
-    if (!motor.current.raf) motor.current.raf = requestAnimationFrame(paso)
+    const asegurarLoop = () => {
+      if (!m.raf) m.raf = requestAnimationFrame(paso)
+    }
+    asegurarLoop()
+
+    // Al entrar en "building", programa un pulso por rol sincronizado
+    // con el instante en que BlocksBuild deja caer ese piso.
+    let timers: number[] = []
+    if (state.phase.name === 'building') {
+      console.log('[TeamBuilderGame] entrando en building, programando pulsos', {
+        torreRefActual: torreRef.current,
+      })
+      timers = ROLES.map((role) => {
+        const indice = NIVELES_EDIFICIO.findIndex((n) => n.role === role)
+        const delayMs = delayNivel(indice, reducedMotion) * 1000
+        console.log('[TeamBuilderGame] timer pulso programado', { role, indice, delayMs })
+        return window.setTimeout(() => {
+          const elChar = charRefs.current[role]
+          const elTorre = torreRef.current
+          console.log('[TeamBuilderGame] timer disparado', {
+            role,
+            elChar: !!elChar,
+            elTorre: !!elTorre,
+          })
+          if (!elChar || !elTorre) {
+            console.log('[TeamBuilderGame] pulso abortado: falta ref', {
+              role,
+              elChar,
+              elTorre,
+            })
+            return
+          }
+          const rectPanel = panel.getBoundingClientRect()
+          const rectChar = elChar.getBoundingClientRect()
+          const rectTorre = elTorre.getBoundingClientRect()
+          console.log(
+            '[TeamBuilderGame] pulso empujado ' +
+              JSON.stringify({
+                role,
+                rectChar: { x: rectChar.x, y: rectChar.y, w: rectChar.width, h: rectChar.height },
+                rectTorre: {
+                  x: rectTorre.x,
+                  y: rectTorre.y,
+                  w: rectTorre.width,
+                  h: rectTorre.height,
+                },
+                rectPanel: {
+                  x: rectPanel.x,
+                  y: rectPanel.y,
+                  w: rectPanel.width,
+                  h: rectPanel.height,
+                },
+              }),
+          )
+          m.pulsos.push({
+            color: ROLE_HEX[role],
+            origen: {
+              x: (rectChar.left + rectChar.width / 2 - rectPanel.left) * dpr,
+              y: (rectChar.top + rectChar.height * 0.5 - rectPanel.top) * dpr,
+            },
+            destino: {
+              x: (rectTorre.left - rectPanel.left) * dpr,
+              y: (rectTorre.top - rectPanel.top) * dpr,
+            },
+            inicio: performance.now(),
+            duracion: TIMINGS.contributePulse * 1000,
+          })
+          asegurarLoop()
+        }, delayMs)
+      })
+    }
+
+    return () => {
+      timers.forEach(window.clearTimeout)
+    }
   }, [state.phase, reducedMotion])
 
   useEffect(() => {
     const m = motor.current
     return () => cancelAnimationFrame(m.raf)
   }, [])
+
+  useEffect(() => {
+    if (!enFinal) return
+    const el = torreRef.current
+    const svg = el?.querySelector('svg')
+    const rect = el?.getBoundingClientRect()
+    const rectSvg = svg?.getBoundingClientRect()
+    const panelRect = panelRef.current?.getBoundingClientRect()
+    const cs = svg ? window.getComputedStyle(svg) : null
+    const parentCs = svg?.parentElement ? window.getComputedStyle(svg.parentElement) : null
+    console.log(
+      '[TeamBuilderGame] torreRef montado ' +
+        JSON.stringify({
+          existe: !!el,
+          rect: rect && { x: rect.x, y: rect.y, w: rect.width, h: rect.height },
+          panelRect: panelRect && {
+            x: panelRect.x,
+            y: panelRect.y,
+            w: panelRect.width,
+            h: panelRect.height,
+          },
+          svgExiste: !!svg,
+          rectSvg: rectSvg && { x: rectSvg.x, y: rectSvg.y, w: rectSvg.width, h: rectSvg.height },
+          svgDisplay: cs?.display,
+          svgOpacity: cs?.opacity,
+          svgVisibility: cs?.visibility,
+          svgTransform: cs?.transform,
+          svgWidthCss: cs?.width,
+          svgHeightCss: cs?.height,
+          standUpTransform: parentCs?.transform,
+          standUpOpacity: parentCs?.opacity,
+          innerWidth: window.innerWidth,
+        }),
+    )
+    console.log('[TeamBuilderGame] torreRef html:', el?.outerHTML)
+  }, [enFinal])
 
   const contador = state.recruited.length + 1 // el CEO ya está a bordo
   const textoCeo = recienLlegado
@@ -274,23 +435,11 @@ function TeamBuilderGame() {
             })}
           </svg>
 
-          {/* Torre de bloques al centro (building y win) */}
-          {enFinal && (
-            <div className={styles.spot} style={estiloSpot('ceo')}>
-              <div className={styles.mover}>
-                <div className={styles.standUp}>
-                  <BlocksBuild
-                    reducida={reducedMotion}
-                    onComplete={() => dispatch({ type: 'BUILD_DONE' })}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* CEO */}
           <div className={styles.spot} style={estiloSpot('ceo')}>
-            <div className={`${styles.platform} ${styles.platformCeo}`} aria-hidden="true" />
+            {!enFinal && (
+              <div className={`${styles.platform} ${styles.platformCeo}`} aria-hidden="true" />
+            )}
             <motion.div
               className={styles.mover}
               initial={false}
@@ -374,7 +523,10 @@ function TeamBuilderGame() {
                         : { duration: 0 }
                   }
                   onAnimationComplete={() => {
-                    if (viajando) dispatch({ type: 'TRAVEL_DONE', role })
+                    if (viajando) {
+                      console.log('[TeamBuilderGame] TRAVEL_DONE', role)
+                      dispatch({ type: 'TRAVEL_DONE', role })
+                    }
                   }}
                 >
                   <div className={styles.standUp}>
@@ -387,7 +539,10 @@ function TeamBuilderGame() {
                       aria-label={reclutado ? `${rolCfg.titulo} reclutado` : rolCfg.ariaLabel}
                       aria-disabled={reclutado || viajando || undefined}
                       tabIndex={reclutado ? -1 : 0}
-                      onClick={() => dispatch({ type: 'CLICK_CANDIDATE', role })}
+                      onClick={() => {
+                        console.log('[TeamBuilderGame] CLICK_CANDIDATE', role)
+                        dispatch({ type: 'CLICK_CANDIDATE', role })
+                      }}
                       initial={false}
                       whileHover={
                         esperando && !reducedMotion ? { y: -6, scale: 1.05 } : undefined
@@ -423,6 +578,22 @@ function TeamBuilderGame() {
               </div>
             )
           })}
+
+          {/* Torre de bloques al centro (building y win): se pinta al
+              final para quedar por encima de la plataforma del CEO y
+              de los candidatos (mismo nivel de stacking, orden DOM). */}
+          {enFinal && (
+            <div ref={torreRef} className={styles.spot} style={estiloSpot('ceo')}>
+              <div className={styles.mover}>
+                <div className={styles.standUpTorre}>
+                  <BlocksBuild
+                    reducida={reducedMotion}
+                    onComplete={() => dispatch({ type: 'BUILD_DONE' })}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </motion.div>
 

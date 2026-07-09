@@ -34,6 +34,7 @@ export function initGameState(): GameState {
 }
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
+  console.log('[reducer] action', action, 'phase antes', state.phase)
   switch (action.type) {
     case 'CLICK_CANDIDATE': {
       const { role } = action
@@ -62,12 +63,14 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         return { ...state, recruited, queue: resto, phase: { name: 'recruiting', role: siguiente } }
       }
       if (recruited.length === ROLES.length) {
+        console.log('[reducer] 5/5 reclutados -> phase building')
         return { ...state, recruited, queue: [], phase: { name: 'building' } }
       }
       return { ...state, recruited, queue: [], phase: { name: 'idle' } }
     }
 
     case 'BUILD_DONE':
+      console.log('[reducer] BUILD_DONE recibido, phase actual:', state.phase.name)
       return state.phase.name === 'building' ? { ...state, phase: { name: 'win' } } : state
 
     case 'RESET':

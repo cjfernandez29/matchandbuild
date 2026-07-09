@@ -7,7 +7,9 @@ export const TIMINGS = {
   transformFlash: 0.45, // pop de transformación a C-level (s)
   bubbleHold: 3, // globo del recién llegado visible (s)
   blockDrop: 0.5, // caída de cada bloque de la torre (s)
-  blockStagger: 0.35, // separación entre bloques (s)
+  blockStagger: 0.35, // separación entre bloques/pisos (s)
+  windowPop: 0.25, // ventanas encendiéndose tras el piso (s)
+  contributePulse: 0.55, // viaje del pulso de partículas al edificio (s)
   winStamp: 0.6, // stamp de "¡WIN!" (s)
   confettiDuration: 2.5, // lluvia de confeti (s)
   nudgeAfter: 6, // segundos de inactividad para el nudge
