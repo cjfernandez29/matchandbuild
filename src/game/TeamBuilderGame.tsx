@@ -90,7 +90,6 @@ function TeamBuilderGame() {
 
   const [recienLlegado, setRecienLlegado] = useState<Role | null>(null)
   const [mostrarReaccionAleatorio, setMostrarReaccionAleatorio] = useState<string | null>(null)
-  const timersRef = useRef<number[]>([])
 
   useEffect(() => {
     const ultimo = state.recruited[state.recruited.length - 1]
@@ -100,24 +99,17 @@ function TeamBuilderGame() {
       return
     }
     setRecienLlegado(ultimo)
-    setMostrarReaccionAleatorio(null)
+
+    // Generar el mensaje aleatorio inmediatamente para evitar volver al inicial
+    const reacciones = juego.ceoReaccionesAleatorias
+    const aleatorio = reacciones[Math.floor(Math.random() * reacciones.length)]
 
     const id = window.setTimeout(() => {
       setRecienLlegado(null)
-      const reacciones = juego.ceoReaccionesAleatorias
-      const aleatorio = reacciones[Math.floor(Math.random() * reacciones.length)]
       setMostrarReaccionAleatorio(aleatorio)
-
-      const id2 = window.setTimeout(() => setMostrarReaccionAleatorio(null), TIMINGS.bubbleHold * 1000)
-      timersRef.current.push(id2)
     }, TIMINGS.bubbleHold * 1000)
 
-    timersRef.current.push(id)
-
-    return () => {
-      timersRef.current.forEach(window.clearTimeout)
-      timersRef.current = []
-    }
+    return () => window.clearTimeout(id)
   }, [state.recruited, juego.ceoReaccionesAleatorias])
 
   const [nudgeRole, setNudgeRole] = useState<Role | null>(null)
@@ -278,9 +270,11 @@ function TeamBuilderGame() {
   }, [])
 
   const contador = state.recruited.length + 1
-  const textoCeo = recienLlegado
-    ? juego.ceoReaccion.replace('{titulo}', juego.roles[recienLlegado].titulo)
-    : mostrarReaccionAleatorio || juego.ceoBubbleIdle
+  const textoCeo = !state.recruited.length
+    ? juego.ceoBubbleIdle
+    : recienLlegado
+      ? juego.ceoReaccion.replace('{titulo}', juego.roles[recienLlegado].titulo)
+      : mostrarReaccionAleatorio || juego.ceoBubbleIdle
 
   const transicionRegrupo = reducedMotion
     ? { duration: 0.05 }
