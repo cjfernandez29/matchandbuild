@@ -35,6 +35,7 @@ export interface EventConfig {
     candidatoBubbleIdle: string;
     candidatoBubbleGo: string;
     ceoReaccion: string;
+    ceoReaccionesAleatorias: string[];
     roles: Record<
       RoleColor,
       { etiqueta: string; titulo: string; ariaLabel: string; bubbleLlegada: string }
@@ -192,6 +193,13 @@ export const EVENT: EventConfig = {
     candidatoBubbleIdle: '¡Elígeme!',
     candidatoBubbleGo: '¡Vamos! ⚡',
     ceoReaccion: '¡Excelente, {titulo} a bordo!',
+    ceoReaccionesAleatorias: [
+      '¡Únete al equipo!',
+      '¡Súmate al reto!',
+      '¡Buscamos a los mejores!',
+      '¡Queremos tu talento!',
+      '¡Se parte de nuestro equipo!',
+    ],
     roles: {
       tecnologia: {
         etiqueta: 'Tecnología',

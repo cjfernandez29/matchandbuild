@@ -89,16 +89,36 @@ function TeamBuilderGame() {
   })
 
   const [recienLlegado, setRecienLlegado] = useState<Role | null>(null)
+  const [mostrarReaccionAleatorio, setMostrarReaccionAleatorio] = useState<string | null>(null)
+  const timersRef = useRef<number[]>([])
+
   useEffect(() => {
     const ultimo = state.recruited[state.recruited.length - 1]
     if (!ultimo) {
       setRecienLlegado(null)
+      setMostrarReaccionAleatorio(null)
       return
     }
     setRecienLlegado(ultimo)
-    const id = window.setTimeout(() => setRecienLlegado(null), TIMINGS.bubbleHold * 1000)
-    return () => window.clearTimeout(id)
-  }, [state.recruited])
+    setMostrarReaccionAleatorio(null)
+
+    const id = window.setTimeout(() => {
+      setRecienLlegado(null)
+      const reacciones = juego.ceoReaccionesAleatorias
+      const aleatorio = reacciones[Math.floor(Math.random() * reacciones.length)]
+      setMostrarReaccionAleatorio(aleatorio)
+
+      const id2 = window.setTimeout(() => setMostrarReaccionAleatorio(null), TIMINGS.bubbleHold * 1000)
+      timersRef.current.push(id2)
+    }, TIMINGS.bubbleHold * 1000)
+
+    timersRef.current.push(id)
+
+    return () => {
+      timersRef.current.forEach(window.clearTimeout)
+      timersRef.current = []
+    }
+  }, [state.recruited, juego.ceoReaccionesAleatorias])
 
   const [nudgeRole, setNudgeRole] = useState<Role | null>(null)
   const [cicloNudge, setCicloNudge] = useState(0)
@@ -260,7 +280,7 @@ function TeamBuilderGame() {
   const contador = state.recruited.length + 1
   const textoCeo = recienLlegado
     ? juego.ceoReaccion.replace('{titulo}', juego.roles[recienLlegado].titulo)
-    : juego.ceoBubbleIdle
+    : mostrarReaccionAleatorio || juego.ceoBubbleIdle
 
   const transicionRegrupo = reducedMotion
     ? { duration: 0.05 }
