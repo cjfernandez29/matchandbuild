@@ -98,7 +98,7 @@ export const EVENT: EventConfig = {
 
   agenda: [
     {
-      dia: 'Viernes 04 de septiembre',
+      dia: 'Viernes 06 de noviembre',
       horario: '3:00 p. m. – 6:00 p. m.',
       hitos: [
         { hora: '3:00 p. m.', titulo: 'Bienvenida e inicio del evento', descripcion: 'Presentación del Match & Build Challenge y organizaciones participantes.' },
@@ -111,7 +111,7 @@ export const EVENT: EventConfig = {
       ],
     },
     {
-      dia: 'Sábado 05 de septiembre',
+      dia: 'Sábado 07 de noviembre',
       horario: '8:00 a. m. – 7:00 p. m.',
       hitos: [
         { hora: '8:00 a. m.', titulo: 'Bienvenida de participantes', descripcion: 'Inicio del evento y recepción de participantes.' },
@@ -153,7 +153,7 @@ export const EVENT: EventConfig = {
     {
       pregunta: '¿Cuándo y dónde se realiza?',
       respuesta:
-        'El jueves 04 de septiembre de 3:00 p. m. a 6:00 p. m. y el viernes 05 de septiembre de 8:00 a. m. a 7:00 p. m., en el Auditorio del 5.º piso del Colegio de Ingenieros del Perú (Av. María Izaga N.º 680, Chiclayo).',
+        'El viernes 06 de noviembre de 3:00 p. m. a 6:00 p. m. y el sábado 07 de noviembre de 8:00 a. m. a 7:00 p. m., en el Auditorio del 5.º piso del Colegio de Ingenieros del Perú (Av. María Izaga N.º 680, Chiclayo).',
     },
     {
       pregunta: '¿Qué debo llevar?',
