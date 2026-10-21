@@ -49,7 +49,7 @@ export interface EventConfig {
 export const EVENT: EventConfig = {
   nombre: 'Match & Build Challenge',
   lema: 'Conecta. Lidera. Construye el futuro.',
-  fechaInicio: '2026-09-04T15:00:00-05:00',
+  fechaInicio: '2026-11-06T15:00:00-05:00',
   urlRegistro: 'https://somosnomadas.vercel.app/onboarding',
 
   lugar: {
