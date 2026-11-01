@@ -77,8 +77,31 @@
   color: var(--color-navy);
 }
 
-.hitoDescripcion {
-  font-size: var(--text-sm);
+.etiqueta {
+  margin-left: var(--space-2);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+}
+
+.reto .punto {
+  background: var(--color-marketing);
+}
+
+.reto .etiqueta {
+  background: color-mix(in srgb, var(--color-marketing) 14%, transparent);
+  color: var(--color-navy);
+}
+
+.pausa .punto {
+  background: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.pausa .hitoTitulo {
   color: var(--color-text-muted);
 }
 

@@ -1,0 +1,103 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.boton:focus-visible {
+  outline: 2px solid var(--color-ceo);
+  outline-offset: 2px;
+}
+
+.icono {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid currentColor;
+  font-family: Georgia, serif;
+  font-size: var(--text-xs);
+  font-style: italic;
+  font-weight: 700;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+.burbuja {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: min(280px, calc(100vw - 4rem));
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-navy);
+  color: var(--color-white);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow: var(--shadow-card-hover);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  pointer-events: none;
+}
+
+/* Flecha apuntando al título */
+.burbuja::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 16px;
+  border: 6px solid transparent;
+  border-top: 0;
+  border-bottom-color: var(--color-navy);
+}
+
+.abierto .burbuja,
+.boton:focus-visible + .burbuja {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.abierto .icono,
+.boton:focus-visible .icono {
+  opacity: 1;
+}
+
+/* Hover solo en dispositivos con puntero real, para que no se quede pegado en táctil */
+@media (hover: hover) {
+  .wrapper:hover .burbuja {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .wrapper:hover .icono {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burbuja,
+  .icono {
+    transition: none;
+    transform: none;
+  }
+}

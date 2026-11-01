@@ -2,6 +2,7 @@ import Header from './components/Header'
 import Hero from './components/Hero'
 import CountdownSection from './components/CountdownSection'
 import QueViviras from './components/QueViviras'
+import Retos from './components/Retos'
 import Agenda from './components/Agenda'
 import Premios from './components/Premios'
 import Ubicacion from './components/Ubicacion'
@@ -18,6 +19,7 @@ function App() {
         <Hero />
         <CountdownSection />
         <QueViviras />
+        <Retos />
         <Agenda />
         <Premios />
         <Ubicacion />
